@@ -16,11 +16,20 @@ async function createAllTables() {
     
     await client.query('BEGIN');
     
-    for (const statement of statements) {
-      const trimmed = statement.trim();
+    for (let i = 0; i < statements.length; i++) {
+      const trimmed = statements[i].trim();
       if (trimmed && !trimmed.startsWith('--')) {
-        await client.query(trimmed);
-        console.log('✓ Executed statement');
+        try {
+          await client.query(trimmed);
+          console.log(`✓ Executed statement ${i + 1}/${statements.length}`);
+        } catch (err: any) {
+          // If table already exists, log warning but continue
+          if (err.code === '42P07') {
+            console.log(`ℹ Table already exists, skipping statement ${i + 1}/${statements.length}`);
+          } else {
+            throw err; // Re-throw other errors
+          }
+        }
       }
     }
     
