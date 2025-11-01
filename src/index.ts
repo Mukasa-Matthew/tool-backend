@@ -35,8 +35,8 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-// CORS: allowlist via env CSV - accept any origin for now
-app.use(cors({ origin: true, credentials: false }));
+// CORS: allow any origin
+app.use(cors({ origin: '*' }));
 
 // Body parsers with sane limits
 app.use(express.json({ limit: '1mb' }));
