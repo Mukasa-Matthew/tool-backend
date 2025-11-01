@@ -90,6 +90,20 @@ CREATE TABLE IF NOT EXISTS students (
     UNIQUE(user_id)
 );
 
+-- Create semesters table (needed before other tables)
+CREATE TABLE IF NOT EXISTS semesters (
+    id SERIAL PRIMARY KEY,
+    hostel_id INTEGER NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    academic_year VARCHAR(20) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'upcoming' CHECK (status IN ('upcoming', 'active', 'ended', 'cancelled')),
+    is_current BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create student room assignments table
 CREATE TABLE IF NOT EXISTS student_room_assignments (
     id SERIAL PRIMARY KEY,
@@ -100,20 +114,6 @@ CREATE TABLE IF NOT EXISTS student_room_assignments (
     assignment_date DATE NOT NULL DEFAULT CURRENT_DATE,
     checkout_date DATE,
     status VARCHAR(50) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Create semesters table
-CREATE TABLE IF NOT EXISTS semesters (
-    id SERIAL PRIMARY KEY,
-    hostel_id INTEGER NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
-    name VARCHAR(100) NOT NULL,
-    academic_year VARCHAR(20) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'upcoming' CHECK (status IN ('upcoming', 'active', 'ended', 'cancelled')),
-    is_current BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
