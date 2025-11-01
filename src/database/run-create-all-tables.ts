@@ -21,17 +21,17 @@ async function createAllTables() {
       if (trimmed && !trimmed.startsWith('--')) {
         try {
           await client.query(trimmed);
-          console.log(`✓ Executed statement ${i + 1}/${statements.length}`);
+          console.log(`✓ Executed statement ${i + 1}/${statements.length}: ${trimmed.substring(0, 50)}...`);
         } catch (err: any) {
           // If table already exists, log warning but continue
           if (err.code === '42P07') {
-            console.log(`ℹ Table already exists, skipping statement ${i + 1}/${statements.length}`);
+            console.log(`ℹ Table already exists, skipping statement ${i + 1}/${statements.length}: ${trimmed.substring(0, 50)}...`);
           } else {
             // Log detailed error for debugging
             console.error(`❌ Error at statement ${i + 1}/${statements.length}:`);
             console.error(`   Code: ${err.code}`);
             console.error(`   Message: ${err.message}`);
-            console.error(`   First 150 chars of statement: ${trimmed.substring(0, 150)}`);
+            console.error(`   Statement: ${trimmed.substring(0, 200)}`);
             throw err; // Re-throw other errors
           }
         }
